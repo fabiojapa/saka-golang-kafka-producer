@@ -1,0 +1,22 @@
+FROM golang:1.8.3 as builder
+#WORKDIR /go/src/github.com/flaviocopes/findlinks
+WORKDIR /app
+#RUN go get -d -v golang.org/x/net/html
+RUN git clone https://github.com/edenhill/librdkafka.git
+WORKDIR /app/librdkafka
+RUN ./configure --prefix /usr
+RUN make
+RUN make install
+WORKDIR /app
+RUN go get -d -v github.com/gorilla/mux
+RUN go get -u github.com/confluentinc/confluent-kafka-go/kafka
+RUN go get -d -v golang.org/x/net/html
+#COPY findlinks.go  .
+COPY kafka.go .
+RUN GOOS=linux go build -a -installsuffix cgo -o kafka .
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /app .
+CMD ["./kafka"]

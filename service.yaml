@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: findlinks-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+  selector:
+    name: findlinks
