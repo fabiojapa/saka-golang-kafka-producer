@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: go-kafka-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: go-kafka
+    spec:
+      containers:
+        - name: go-kafka
+          image: fabiojapa/golang-docker-example-rest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: 50m
+              memory: 32Mi
+            requests:
+              cpu: 5m
+              memory: 8Mi
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /contato
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2

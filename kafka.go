@@ -1,12 +1,12 @@
 package main
 
 import (
-    "fmt"
 	"encoding/json"
+	"fmt"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-    "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
 // "Person type" (tipo um objeto)
@@ -63,10 +63,46 @@ func DeletePerson(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
 func Kafka(w http.ResponseWriter, r *http.Request) {
 
-	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "broker.test-config.svc.cluster.local"})
+	//jaasConfig := "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"lctyLdXYt8\";"
+	bootstrapAddress := "broker1-dev.sascar.com.br:9092,broker2-dev.sascar.com.br:9092,broker3-dev.sascar.com.br:9092"
+	//bootstrapAddress := "broker1-dev.sascar.com.br"
+	//bootstrapAddress := "broker.test-config.svc.cluster.local"
+	/*
+		config := &kafka.ConfigMap{
+			"bootstrap.servers": bootstrapAddress,
+			"acks": "1",
+			"retries": "2",
+			//"ssl.truststore.location": "/home/sakamoto/git/go/src/sascar-go-kafka-producer/demo.dev.truststore.jks",
+			//"ssl.truststore.password": "confluent",
+			"ssl.keystore.location": "/home/sakamoto/git/go/src/sascar-go-kafka-producer/demo.dev.keystore.jks",
+			"ssl.keystore.password": "confluent",
+			//"sasl.jaas.config": jaasConfig,
+			"sasl.mechanism": "SCRAM-SHA-512",
+			"sasl.username": "admin",
+			"sasl.password": "lctyLdXYt8",
+			"security.protocol": "SASL_SSL",
+			//"ssl.endpoint.identification.algorithm": "",
+			//"consumer.interceptor.classes": "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor",
+			//"interceptor.classes": "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor",
+			"client.id": "sascar-poc-confluent"}
+	*/
+	config := &kafka.ConfigMap{
+		"bootstrap.servers": bootstrapAddress,
+		//"metadata.broker.list": bootstrapAddress,
+		"acks":              "1",
+		"retries":           "2",
+		"security.protocol": "SASL_SSL",
+		//"debug": "security",
+		"sasl.mechanisms":          "SCRAM-SHA-512",
+		"sasl.username":            "admin",
+		"sasl.password":            "lctyLdXYt8",
+		"ssl.ca.location":          "casnakeoil-ca-1.crt",
+		"ssl.certificate.location": "demo.pem",
+		"ssl.key.location":         "demo.key",
+		"ssl.key.password":         "confluent"}
+	p, err := kafka.NewProducer(config)
 	if err != nil {
 		panic(err)
 	}
@@ -88,7 +124,7 @@ func Kafka(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// Produce messages to topic (asynchronously)
-	topic := "customer-topic"
+	topic := "perftest"
 	for _, word := range []string{"Welcome", "to", "the", "Confluent", "Kafka", "Golang", "client"} {
 		p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
@@ -112,8 +148,8 @@ func main() {
 	router.HandleFunc("/contato/{id}", GetPerson).Methods("GET")
 	router.HandleFunc("/contato/{id}", CreatePerson).Methods("POST")
 	router.HandleFunc("/contato/{id}", DeletePerson).Methods("DELETE")
-    
-    router.HandleFunc("/kafka", Kafka).Methods("GET")
+
+	router.HandleFunc("/kafka", Kafka).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
