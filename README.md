@@ -1,3 +1,12 @@
-https://medium.com/@rafaelacioly/construindo-uma-api-restful-com-go-d6007e4faff6
+# Rodar local
+go run kafka.go
 
-https://flaviocopes.com/golang-docker/#multi-stage-builds
+# Rodar container local
+- Ajustar org xpto:
+
+docker build -t xpto/golang-docker-example-rest .
+
+docker run -p 8000:8000 xpto/golang-docker-example-rest
+
+# Testar local - Produzir mensagens
+http://localhost:8000/kafka
