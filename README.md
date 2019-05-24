@@ -1,7 +1,7 @@
-# Rodar local
+# Opção 1: Rodar local
 go run kafka.go
 
-# Rodar container local
+# Opção 2: Rodar container local
 - Ajustar org xpto:
 
 docker build -t xpto/golang-docker-example-rest .
