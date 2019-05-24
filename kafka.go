@@ -76,9 +76,9 @@ func Kafka(w http.ResponseWriter, r *http.Request) {
 		"sasl.mechanisms":          "SCRAM-SHA-512",
 		"sasl.username":            "admin",
 		"sasl.password":            "lctyLdXYt8",
-		"ssl.ca.location":          "casnakeoil-ca-1.crt",
-		"ssl.certificate.location": "demo.pem",
-		"ssl.key.location":         "demo.key",
+		"ssl.ca.location":          "./etc/cert/casnakeoil-ca-1.crt",
+		"ssl.certificate.location": "./etc/cert/demo.pem",
+		"ssl.key.location":         "./etc/cert/demo.key",
 		"ssl.key.password":         "confluent"}
 	p, err := kafka.NewProducer(config)
 	if err != nil {

@@ -21,13 +21,12 @@ FROM alpine:latest
 RUN apk add --update --no-cache bash ca-certificates \
       libressl zlib-dev cyrus-sasl-dev \
 openssl-dev \
-build-base
+build-base \
+&& mkdir -p /app/etc/cert
 WORKDIR /app
 COPY --from=builder /app .
-COPY etc/docker/demo.key .
-COPY etc/docker/demo.pem .
-COPY etc/docker/casnakeoil-ca-1.crt .
-RUN chmod 644 demo.key demo.pem casnakeoil-ca-1.crt
+COPY etc/cert /app/etc/cert
+RUN chmod 644 /app/etc/cert/*
 WORKDIR /app/librdkafka
 RUN ./configure --prefix /usr \
 && make \

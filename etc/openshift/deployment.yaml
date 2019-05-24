@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: go-kafka
-          image: fabiojapa/golang-docker-example-rest
+          image: fabiojapa/golang-cert-example-rest
           ports:
             - containerPort: 8000
           resources:
