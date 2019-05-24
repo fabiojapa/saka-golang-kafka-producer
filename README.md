@@ -14,4 +14,5 @@ http://localhost:8000/kafka
 
 # para subir no openshift
 oc create -f ./etc/openshift/deployment.yaml
+
 oc create -f ./etc/openshift/service.yaml
