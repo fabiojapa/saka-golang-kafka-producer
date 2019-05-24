@@ -65,29 +65,7 @@ func DeletePerson(w http.ResponseWriter, r *http.Request) {
 
 func Kafka(w http.ResponseWriter, r *http.Request) {
 
-	//jaasConfig := "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"lctyLdXYt8\";"
 	bootstrapAddress := "broker1-dev.sascar.com.br:9092,broker2-dev.sascar.com.br:9092,broker3-dev.sascar.com.br:9092"
-	//bootstrapAddress := "broker1-dev.sascar.com.br"
-	//bootstrapAddress := "broker.test-config.svc.cluster.local"
-	/*
-		config := &kafka.ConfigMap{
-			"bootstrap.servers": bootstrapAddress,
-			"acks": "1",
-			"retries": "2",
-			//"ssl.truststore.location": "/home/sakamoto/git/go/src/sascar-go-kafka-producer/demo.dev.truststore.jks",
-			//"ssl.truststore.password": "confluent",
-			"ssl.keystore.location": "/home/sakamoto/git/go/src/sascar-go-kafka-producer/demo.dev.keystore.jks",
-			"ssl.keystore.password": "confluent",
-			//"sasl.jaas.config": jaasConfig,
-			"sasl.mechanism": "SCRAM-SHA-512",
-			"sasl.username": "admin",
-			"sasl.password": "lctyLdXYt8",
-			"security.protocol": "SASL_SSL",
-			//"ssl.endpoint.identification.algorithm": "",
-			//"consumer.interceptor.classes": "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor",
-			//"interceptor.classes": "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor",
-			"client.id": "sascar-poc-confluent"}
-	*/
 	config := &kafka.ConfigMap{
 		"bootstrap.servers": bootstrapAddress,
 		//"metadata.broker.list": bootstrapAddress,
