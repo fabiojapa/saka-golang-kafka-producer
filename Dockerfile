@@ -32,6 +32,7 @@ WORKDIR /app/librdkafka
 RUN ./configure --prefix /usr \
 && make \
 && make install
-RUN apk del build-base bash ca-certificates libressl zlib-dev openssl-dev
 WORKDIR /app
+RUN apk del build-base bash ca-certificates libressl zlib-dev openssl-dev
+RUN rm -rf /app/librdkafka
 CMD ["./kafka"]
