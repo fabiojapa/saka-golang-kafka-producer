@@ -65,7 +65,7 @@ func DeletePerson(w http.ResponseWriter, r *http.Request) {
 
 func Kafka(w http.ResponseWriter, r *http.Request) {
 
-	bootstrapAddress := "broker1-dev.sascar.com.br:9092,broker2-dev.sascar.com.br:9092,broker3-dev.sascar.com.br:9092"
+	bootstrapAddress := "broker1-dev.host.com.br:9092,broker2-dev.host.com.br:9092,broker3-dev.host.com.br:9092"
 	config := &kafka.ConfigMap{
 		"bootstrap.servers": bootstrapAddress,
 		//"metadata.broker.list": bootstrapAddress,
